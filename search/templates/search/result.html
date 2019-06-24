@@ -31,7 +31,7 @@
 
         <!-- content -->
         <div class="row justify-content-center">
-            {% if list_food|length >= 7 %}
+            {% if list_food|length >= 4 %}
                 <style type="text/css">
                     .delimit-display{padding-top: 120px;}
                 </style>
@@ -54,7 +54,7 @@
                         </a>
                         <div class="card-body">
                             <h4 class="card-title text-center">{{ food.name }}</h4>
-                            <a href="#" class="btn btn-color-personal btn-save-food"><p class="d-none">{{ food.id }}</p><i class="fas fa-save"></i> Sauvegarder</a>
+                            <a href="{% url 'search:substitute' food.id %}" class="btn btn-color-personal btn-save-food">Trouver son substitut</a>
                         </div>
                     </div>
                 </div>
@@ -87,4 +87,6 @@
         </div><!-- end .row justify-content-center -->
     </div><!-- end .container-fluid h-100 -->
 </header>
+<script src="{% static 'search/js/notmatch.js' %}"></script>
+<script src="{% static 'search/js/result.js' %}"></script>
 {% endblock content %}

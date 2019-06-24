@@ -2,7 +2,7 @@ function notMatch() {
 
     var match = document.getElementById('match');
 
-    if (match !== null) {
+    if (match.innerHTML === "False") {
         var titleBox = document.getElementById('titleBox');
         var bodyBox = document.getElementById('bodyBox');
         var buttonClose = document.getElementById('btnClose');

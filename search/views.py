@@ -41,32 +41,20 @@ def result(request):
     else:
         return render(request, 'search/no_search.html', context=context)
 
-def substitutefood(request):
+def substitutefood(request, food_id):
     context = {}
 
-    if request.method == 'POST':
+    try:
+        food_search = Aliment.objects.get(pk=food_id)
+        sub = substitute(food_search)
+        context['match'] = True
+        context['food'] = food_search
+        context['list_food'] = sub
 
-        form = SearchForm(request.POST)
-        if form.is_valid():
-            food_search = form.cleaned_data['research']
-            food = Aliment.objects.filter(name__contains=food_search)
+    except:
+        context['match'] = False
 
-            if food.exists():
-                sub = substitute(food[0])
-                context['match'] = True
-                context['food'] = food[0]
-                context['list_food'] = sub
-            
-            else:
-                context['match'] = False
-        
-        else:
-            context['errors'] = form.errors.items()
-
-        return render(request, 'search/substitute.html', context=context)
-    
-    else:
-        return render(request, 'search/no_search.html', context=context)
+    return render(request, 'search/substitute.html', context=context)
 
 class DetailView(generic.DetailView):
     model = Aliment
