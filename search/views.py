@@ -26,6 +26,32 @@ def result(request):
             food = Aliment.objects.filter(name__contains=food_search)
 
             if food.exists():
+                context['match'] = True
+                context['food'] = food[0]
+                context['list_food'] = food
+            
+            else:
+                context['match'] = False
+        
+        else:
+            context['errors'] = form.errors.items()
+
+        return render(request, 'search/result.html', context=context)
+    
+    else:
+        return render(request, 'search/no_search.html', context=context)
+
+def substitutefood(request):
+    context = {}
+
+    if request.method == 'POST':
+
+        form = SearchForm(request.POST)
+        if form.is_valid():
+            food_search = form.cleaned_data['research']
+            food = Aliment.objects.filter(name__contains=food_search)
+
+            if food.exists():
                 sub = substitute(food[0])
                 context['match'] = True
                 context['food'] = food[0]
@@ -37,7 +63,7 @@ def result(request):
         else:
             context['errors'] = form.errors.items()
 
-        return render(request, 'search/result.html', context=context)
+        return render(request, 'search/substitute.html', context=context)
     
     else:
         return render(request, 'search/no_search.html', context=context)
