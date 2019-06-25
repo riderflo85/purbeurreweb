@@ -19,6 +19,7 @@ class SatusCodePageTestCase(TestCase):
         alim.nutriments = "{'succre pour 100g': 12}"
         alim.categorie = cat
         alim.save()
+        self.alim_pk = alim.pk
 
     def test_page_index(self):
         rep = self.cli.get('/')
@@ -27,13 +28,13 @@ class SatusCodePageTestCase(TestCase):
     def test_page_result(self):
         rep = self.cli.get('/result')
         self.assertEqual(rep.status_code, 200)
-    
+
     def test_page_substitute(self):
-        rep = self.cli.get('/substitute/1')
+        rep = self.cli.get('/substitute/{}'.format(self.alim_pk))
         self.assertEqual(rep.status_code, 200)
 
     def test_page_food_detail(self):
-        rep = self.cli.get('/food_detail/3')
+        rep = self.cli.get('/food_detail/{}'.format(self.alim_pk))
         self.assertEqual(rep.status_code, 200)
 
 
@@ -149,9 +150,10 @@ class FunctionSubstituteTestCase(TestCase):
         alim2.nutriments = "{'succre pour 100g': 12}"
         alim2.categorie = cat
         alim2.save()
+        self.food2 = alim2
     
     def test_result_substitute(self):
         food = Aliment.objects.get(name='Pomme')
         sub = substitute(food)
-        self.assertQuerysetEqual(sub, {'<Aliment: Fraise>': 1}, ordered=False)
         self.assertEqual(sub[0].name, 'Fraise')
+        self.assertEqual(sub[0], self.food2)
