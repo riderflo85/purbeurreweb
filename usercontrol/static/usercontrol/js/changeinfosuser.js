@@ -31,29 +31,44 @@ function changeInfosUser() {
         var confirmNewPwdField = document.getElementById('confirmNewPwd');
 
         if (newPwdField.value === confirmNewPwdField.value) {
-            $.ajax({
-                url: 'change_pwd',
-                type: 'POST',
-                dataType: 'json',
-                data: {'old_pwd': pwdField.value, 'new_pwd': newPwdField.value, 'confirm_pwd': confirmNewPwdField.value},
-                success: function (data) {
-
-                    if (data) {
-                        var allField = document.getElementsByClassName('complete');
+            if (newPwdField.value.length >= 8){
+                $.ajax({
+                    url: 'change_pwd',
+                    type: 'POST',
+                    dataType: 'json',
+                    data: {'old_pwd': pwdField.value, 'new_pwd': newPwdField.value, 'confirm_pwd': confirmNewPwdField.value},
+                    success: function (data) {
     
-                        for (let i = 0; i < allField.length; i++) {
-                            allField[i].classList.add('d-none');
+                        if (data === 'True') {
+                            var allField = document.getElementsByClassName('complete');
+        
+                            for (let i = 0; i < allField.length; i++) {
+                                allField[i].classList.add('d-none');
+                            }
+                            btnSave.classList.add('d-none');
+                            btnCancel.innerHTML = 'Fermer';
+                            status.innerHTML = 'Mot de passe changez avec succes';
+                            status.classList.add('text-success');
+                        }else{
+                            status.innerHTML = "Veuillez indiquer votre mot de passe actuel.";
+                            status.classList.add('text-danger');
+                            pwdField.classList.add('is-invalid');
                         }
-                        btnSave.classList.add('d-none');
-                        btnCancel.innerHTML = 'Fermer';
-                        status.innerHTML = 'Mot de passe changez avec succes';
-                        status.classList.add('text-success');
-                    }
-                },
-                error: function (error) {
-                    console.log(error);
-                },
-            });
+                    },
+                    error: function (error) {
+                        console.log(error);
+                    },
+                });
+            }else{
+                status.innerHTML = "Votre nouveau mot de passe dois faire au moins 8 caractères. Veuillez corriger cela.";
+                status.classList.add('text-danger');
+                newPwdField.classList.add('is-invalid');
+            }
+
+        }else{
+            status.innerHTML = "La confirmation de votre mot de passe est différente. Veuillez corriger cela.";
+            status.classList.add('text-danger');
+            confirmNewPwdField.classList.add('is-invalid');
         }
     });
 }
