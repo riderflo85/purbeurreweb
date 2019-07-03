@@ -96,7 +96,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'purbeurre_db',
     'USER': 'pbweb',
-    'PASSWORD': 'db30cq02',
+    'PASSWORD': os.environ['PWDDB'],
     'HOST': '',
     'PORT': '5432',
     }
