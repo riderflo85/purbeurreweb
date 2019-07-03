@@ -40,7 +40,6 @@ SECRET_KEY = os.environ['SECRET_KEY']
 #     DEBUG = True
 DEBUG = True
 
-# ALLOWED_HOSTS = ['127.0.0.1', '52.47.149.88']
 ALLOWED_HOSTS = ['127.0.0.1']
 
 
