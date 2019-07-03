@@ -1,0 +1,22 @@
+language: python
+python:
+    - '3.7'
+
+before_scripts:
+    - pipenv install
+
+env:
+    - ENV='PRODUCTION'
+    - SECRET_KEY_PROD="sdbdfbjdfihb3248DsvsfdbfdsEJZH03"
+    - DJANGO_SETTINGS_MODULE="purbeurre_project.settings.production"
+
+services:
+    - postgresql
+
+branches:
+    only:
+        - config_for_prod
+
+script:
+    - ./manage.py test
+
