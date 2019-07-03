@@ -39,7 +39,7 @@ if os.environ.get('ENV') == 'PRODUCTION':
 elif os.environ.get('ENV') == 'DEV':
     DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1',]
+ALLOWED_HOSTS = ['127.0.0.1', '52.47.149.88']
 
 
 # Application definition
@@ -95,8 +95,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'purbeurre_db',
-    'USER': '',
-    'PASSWORD': '',
+    'USER': 'pbweb',
+    'PASSWORD': 'db30cq02',
     'HOST': '',
     'PORT': '5432',
     }
