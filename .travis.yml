@@ -8,11 +8,12 @@ branches:
         - config_for_prod
 
 before_scripts:
+    - pip3 install pipenv
     - pipenv install
 
 env:
-    - ENV='PRODUCTION'
-    - SECRET_KEY_PROD="sdbdfbjdfihb3248DsvsfdbfdsEJZH03"
+    - ENV="PRODUCTION"
+    - SECRET_KEY="sdbdfbjdfDsvsfdbfdsEJZH03"
     - DJANGO_SETTINGS_MODULE="purbeurre_project.settings.production"
 
 services:
