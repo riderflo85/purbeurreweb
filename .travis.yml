@@ -11,7 +11,7 @@ before_scripts:
     - pip3 install pipenv
     - pipenv install
 
-env: DJANGO_SETTINGS_MODULE="purbeurre_project.settings.travis"
+env: DJANGO_SETTINGS_MODULE=purbeurre_project.settings.travis
 
 services:
     - postgresql
