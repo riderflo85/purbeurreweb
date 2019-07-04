@@ -1,7 +1,7 @@
 from . import *
 
 
-SECRET_KEY="sdbdfbjdfDsvsfdbfdsEJZH03"
+SECRET_KEY = "sdbdfbjdfDsvsfdbfdsEJZH03"
 
 DATABASES = {
     'default': {
