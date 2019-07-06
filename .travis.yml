@@ -10,6 +10,7 @@ branches:
 before_scripts:
     - pip3 install pipenv
     - pipenv install
+    - pipenv shell
 
 env: DJANGO_SETTINGS_MODULE=purbeurre_project.settings.travis
 
@@ -17,5 +18,5 @@ services:
     - postgresql
 
 script:
-    - pipenv run ./manage.py test
+    - ./manage.py test
 
