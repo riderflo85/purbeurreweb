@@ -13,8 +13,7 @@ before_scripts:
     - pipenv shell
 
 env: 
-    - DJANGO_SETTINGS_MODULE=purbeurre_project.settings.travis
-    - SECRET_KEY='qcsdf'
+    - DJANGO_SETTINGS_MODULE=purbeurre_project.settings.travis SECRET_KEY='qcsdf' PWDDB='svhvd'
 
 services:
     - postgresql
