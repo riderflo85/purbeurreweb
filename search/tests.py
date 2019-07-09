@@ -19,6 +19,7 @@ class SatusCodePageTestCase(TestCase):
         alim.nutriments = "{'succre pour 100g': 12}"
         alim.categorie = cat
         alim.save()
+        self.food = alim
 
     def test_page_index(self):
         rep = self.cli.get('/')
@@ -29,7 +30,7 @@ class SatusCodePageTestCase(TestCase):
         self.assertEqual(rep.status_code, 200)
 
     def test_page_food_detail(self):
-        rep = self.cli.get('/food_detail/6')
+        rep = self.cli.get('/food_detail/{}'.format(self.food.id))
         self.assertEqual(rep.status_code, 200)
 
     def test_page_legal_mention(self):
@@ -52,6 +53,7 @@ class RenderTemplateTestCase(TestCase):
         alim.nutriments = "{'succre pour 100g': 12}"
         alim.categorie = cat
         alim.save()
+        self.food = alim
 
     def test_template_page_index(self):
         rep = self.cli.get('/')
@@ -62,7 +64,7 @@ class RenderTemplateTestCase(TestCase):
         self.assertTemplateUsed(rep, 'search/no_search.html')
 
     def test_template_page_food_detail(self):
-        rep = self.cli.get('/food_detail/3')
+        rep = self.cli.get('/food_detail/{}'.format(self.food.id))
         self.assertTemplateUsed(rep, 'search/food_detail.html')
 
     def test_template_page_legal_mention(self):
