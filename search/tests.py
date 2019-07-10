@@ -1,7 +1,10 @@
 from django.test import TestCase, Client
-from .models import Categorie, Aliment
+from django.contrib.auth.models import User
+from .models import Categorie, Aliment, Favoris
 from .complete_db import category_table, sorted_nutriment
 from .substitute import substitute
+from .views import index, result, myfood, legalmention, DetailView
+from .forms import SearchForm
 
 
 class SatusCodePageTestCase(TestCase):
@@ -37,6 +40,51 @@ class SatusCodePageTestCase(TestCase):
         rep = self.cli.get('/mention_legale')
         self.assertEqual(rep.status_code, 200)
 
+    def test_page_my_food(self):
+        rep = self.cli.get('/my_food')
+        self.assertEqual(rep.status_code, 200)
+
+
+class CheckViewsTestCase(TestCase):
+    def setUp(self):
+        self.cli = Client()
+        cat = Categorie()
+        cat.name = 'fruit'
+        cat.save()
+        alim = Aliment()
+        alim.name = 'Mangue'
+        alim.nutrition_group = 'c'
+        alim.nova_group = 2
+        alim.shop = 'Hyper U'
+        alim.link = 'https://link.shop.com'
+        alim.nutriments = "{'succre pour 100g': 7}"
+        alim.categorie = cat
+        alim.save()
+        self.food = alim
+
+    def test_views_page_index(self):
+        rep = self.cli.get('/')
+        self.assertEqual(rep.resolver_match.func, index)
+
+    def test_views_page_result(self):
+        rep = self.cli.get('/result')
+        self.assertEqual(rep.resolver_match.func, result)
+
+    def test_views_page_food_detail(self):
+        rep = self.cli.get('/food_detail/{}'.format(self.food.id))
+        self.assertEqual(
+            rep.resolver_match.func.__name__,
+            DetailView.as_view().__name__
+        )
+
+    def test_views_page_legal_mention(self):
+        rep = self.cli.get('/mention_legale')
+        self.assertEqual(rep.resolver_match.func, legalmention)
+
+    def test_views_page_my_food(self):
+        rep = self.cli.get('/my_food')
+        self.assertEqual(rep.resolver_match.func, myfood)
+
 
 class RenderTemplateTestCase(TestCase):
     def setUp(self):
@@ -70,6 +118,10 @@ class RenderTemplateTestCase(TestCase):
     def test_template_page_legal_mention(self):
         rep = self.cli.get('/mention_legale')
         self.assertTemplateUsed(rep, 'search/legal_mention.html')
+
+    def test_temlpate_page_my_food(sefl):
+        rep = sefl.cli.get('/my_food')
+        sefl.assertTemplateUsed(rep, 'search/my_food.html')
 
 
 class FunctionCompleteDbTestCase(TestCase):
@@ -161,11 +213,50 @@ class FunctionCompleteDbTestCase(TestCase):
         self.assertEqual(nut_sorted, result)
 
 
+class SearchFormTestCase(TestCase):
+    def setUp(self):
+        self.cli = Client()
+        cat = Categorie()
+        cat.name = 'Fruit'
+        cat.save()
+        alim = Aliment()
+        alim.name = 'Pomme'
+        alim.nutrition_group = 'c'
+        alim.nova_group = 2
+        alim.shop = 'Hyper U'
+        alim.link = 'https://link.shop.com'
+        alim.nutriments = "{'succre pour 100g': 12}"
+        alim.categorie = cat
+        alim.save()
+        self.send_data = {'research': 'Pomme'}
+        self.food = alim
+
+    def test_search_form(self):
+        form = SearchForm(data=self.send_data)
+        self.assertTrue(form.is_valid())
+
+    def test_template_after_post_data(self):
+        rep = self.cli.post('/result', self.send_data)
+        self.assertTemplateUsed(rep, 'search/result.html')
+
+    def test_food_exist_for_search(self):
+        rep = self.cli.post('/result', self.send_data)
+        self.assertTrue(rep.context['match'])
+        self.assertEqual(rep.context['food'], self.food)
+        self.assertEqual(rep.context['list_food'], None)
+
+    def test_food_not_exist_for_search(self):
+        rep = self.cli.post('/result', {'research': 'Fraise'})
+        self.assertFalse(rep.context['match'])
+
 class FunctionSubstituteTestCase(TestCase):
     def setUp(self):
         cat = Categorie()
         cat.name = 'Fruit'
         cat.save()
+        cat2 = Categorie()
+        cat2.name = 'Boisson'
+        cat2.save()
         alim1 = Aliment()
         alim1.name = 'Pomme'
         alim1.nutrition_group = 'c'
@@ -184,9 +275,63 @@ class FunctionSubstituteTestCase(TestCase):
         alim2.nutriments = "{'succre pour 100g': 12}"
         alim2.categorie = cat
         alim2.save()
-    
-    def test_result_substitute(self):
+        alim3 = Aliment()
+        alim3.name = 'Jus de fruits'
+        alim3.nutrition_group = 'b'
+        alim3.nova_group = 1
+        alim3.shop = 'Lidl'
+        alim3.link = 'https://link.shop.com'
+        alim3.nutriments = "{'succre pour 100g': 12}"
+        alim3.categorie = cat2
+        alim3.save()
+        self.food = alim2
+        self.food2 = alim3
+
+    def test_result_valide_substitute(self):
         food = Aliment.objects.get(name='Pomme')
         sub = substitute(food)
-        self.assertQuerysetEqual(sub, {'<Aliment: Fraise>': 1}, ordered=False)
         self.assertEqual(sub[0].name, 'Fraise')
+        self.assertEqual(sub[0], self.food)
+        self.assertEqual(sub[0].nutrition_group, 'a')
+
+    def test_result_invalide_substitute(self):
+        food = Aliment.objects.get(name='Jus de fruits')
+        sub = substitute(food)
+        self.assertIsNone(sub)
+
+
+class SaveFoodFavoritesTestCase(TestCase):
+    def setUp(self):
+        self.cat = Categorie.objects.create(name='Fruits')
+        alim = Aliment()
+        alim.name = 'Peche'
+        alim.nutrition_group = 'a'
+        alim.nova_group = 1
+        alim.shop = 'Leclerc'
+        alim.link = 'https://link.shop.com'
+        alim.nutriments = "{'succre pour 100g': 12}"
+        alim.categorie = self.cat
+        alim.save()
+        user_test = User.objects.create_user(
+            username='testUser',
+            email='testuser@founisseur.com',
+            password='test'
+        )
+        user_test.first_name = 'Tester'
+        user_test.last_name = 'FooTest'
+        user_test.save()
+        self.user = user_test
+        self.food = alim
+        self.cli = Client()
+
+    def test_save_food(self):
+        self.cli.login(
+            username=self.user.username,
+            password='test'
+        )
+        rep = self.cli.post('/save_food', {'idFood': self.food.pk})
+        user_save_fav = Favoris.objects.get(user=self.user).user
+        alim_for_substitute = Favoris.objects.get(substitute=self.food).substitute
+
+        self.assertEqual(user_save_fav, self.user)
+        self.assertEqual(alim_for_substitute, self.food)
