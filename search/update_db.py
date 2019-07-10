@@ -5,6 +5,7 @@ def update_database(cat, dico_food):
     """ update database content """
 
     id_cat = 1
+    counter = 0
     try:
         for i in cat:
             for food in dico_food[i]:
@@ -19,9 +20,10 @@ def update_database(cat, dico_food):
                     new_food.nutriments = food[6]
                     new_food.categorie_id = id_cat
                     new_food.save()
+                    counter += 1
                 except:
                     pass
             id_cat += 1
-        return True
+        return {'status': True, 'counter': counter}
     except:
-        return False
+        return {'status': False}

@@ -94,16 +94,16 @@ WSGI_APPLICATION = 'purbeurre_project.wsgi.application'
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
 # Configuration de la base de données pour du distant
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'purbeurre_db',
-    'USER': 'pbweb',
-    'PASSWORD': os.environ['PWDDB'],
-    'HOST': '',
-    'PORT': '5432',
-    }
-}
+#DATABASES = {
+#    'default': {
+#        'ENGINE': 'django.db.backends.postgresql',
+#        'NAME': 'purbeurre_db',
+#    'USER': 'pbweb',
+#    'PASSWORD': os.environ['PWDDB'],
+#    'HOST': '',
+#    'PORT': '5432',
+#    }
+#}
 
 
 # Password validation

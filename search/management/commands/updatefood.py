@@ -17,9 +17,10 @@ class Command(BaseCommand):
         food = main()
         result = update_database(cat, food)
 
-        if result:
+        if result['status']:
             self.stdout.write(self.style.SUCCESS(
-                'La mise à jour de la base de données est terminée.'
+                "La mise à jour de la base de données est terminée.\
+                \n{} produits on été ajoutés.".format(result['counter'])
             ))
         
         else:
