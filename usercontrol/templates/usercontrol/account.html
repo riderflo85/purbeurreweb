@@ -24,12 +24,13 @@
             </div>
             <div class="col-12">
                 <button type="button" class="btn btn-primary" id="btnChangePwd">Changer de mot de passe</button>
+                <button type="button" class="btn btn-primary" id="btnChangeEmail">Changer d'adresse mail</button>
             </div>
         </div>
     </div>
 
-    <!-- Modal Box -->
-    <div class="modal fade" tabindex="-1" role="dialog" id="modalBoxAccount">
+    <!-- Modal Box n°1 -->
+    <div class="modal fade" tabindex="-1" role="dialog" id="modalPwdUser">
         <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -39,7 +40,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <p class="lead text-center" id='bodyBox'>Veuillez renseignez les champs de saisie</p>
+                    <p class="lead text-center" id='bodyBoxPwd'>Veuillez renseignez les champs de saisie</p>
                     <div class="input-group my-5 complete">
                         <div class="input-group-prepend">
                             <span class="input-group-text">Ancien mot de passe</span>
@@ -64,13 +65,53 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" id="btnBoxSave">Enregistrer</button>
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal" id="btnCancel">Annuler</button>
+                    <button type="button" class="btn btn-primary" id="btnBoxSavePwd">Enregistrer</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" id="btnCancelPwd">Annuler</button>
                 </div>
             </div>
         </div>
-    </div>
+    </div><!-- end .modal fade -->
+
+    <!-- Modal Box n°2 -->
+    <div class="modal fade" tabindex="-1" role="dialog" id="modalEmailUser">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="titleBox">Changement de votre adresse email</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p class="lead text-center" id='bodyBoxEmail'>Veuillez renseignez les champs de saisie</p>
+                    <div class="input-group my-5 complete">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Ancienne adresse email</span>
+                        </div>
+                        <input type="text" name="oldemail" id="oldemail" class="form-control">
+                    </div>
+                    <div class="input-group my-5 complete">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Nouvelle adresse email</span>
+                        </div>
+                        <input type="text" name="newemail" id="newemail" class="form-control">
+                    </div>
+                    <div class="input-group my-5 complete">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Confirmez votre nouvelle adresse email</span>
+                        </div>
+                        <input type="text" name="newemail" id="confirmNewEmail" class="form-control">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="btnBoxSaveEmail">Enregistrer</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" id="btnCancelEmail">Annuler</button>
+                </div>
+            </div>
+        </div>
+    </div><!-- end .modal fade -->
 </header>
+<script src="{% static 'usercontrol/js/changepwduser.js' %}"></script>
 <script src="{% static 'usercontrol/js/changeinfosuser.js' %}"></script>
 
 {% endblock content %}
