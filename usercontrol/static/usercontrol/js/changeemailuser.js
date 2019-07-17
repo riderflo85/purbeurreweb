@@ -27,42 +27,35 @@ function changeEmailUser() {
         var confirmNewEmailField = document.getElementById('confirmNewEmail');
 
         if (newEmailField.value === confirmNewEmailField.value) {
-            if (newEmailField.value.length >= 8) {
-                $.ajax({
-                    url: 'change_email',
-                    type: 'POST',
-                    dataType: 'json',
-                    data: { 'old_email': emailField.value, 'new_email': newEmailField.value, 'confirm_email': confirmNewEmailField.value },
-                    success: function (data) {
+            $.ajax({
+                url: 'change_email',
+                type: 'POST',
+                dataType: 'json',
+                data: { 'old_email': emailField.value, 'new_email': newEmailField.value, 'confirm_email': confirmNewEmailField.value },
+                success: function (data) {
 
-                        if (data === 'True') {
-                            var allField = document.getElementsByClassName('complete');
+                    if (data === 'True') {
+                        var allField = document.getElementsByClassName('complete');
 
-                            for (let i = 0; i < allField.length; i++) {
-                                allField[i].classList.add('d-none');
-                            }
-                            btnSave.classList.add('d-none');
-                            btnCancel.innerHTML = 'Fermer';
-                            status.innerHTML = 'Mot de passe changez avec succes';
-                            status.classList.add('text-success');
-                        } else {
-                            status.innerHTML = "Veuillez indiquer votre mot de passe actuel.";
-                            status.classList.add('text-danger');
-                            emailField.classList.add('is-invalid');
+                        for (let i = 0; i < allField.length; i++) {
+                            allField[i].classList.add('d-none');
                         }
-                    },
-                    error: function (error) {
-                        console.log(error);
-                    },
-                });
-            } else {
-                status.innerHTML = "Votre nouveau mot de passe dois faire au moins 8 caractères. Veuillez corriger cela.";
-                status.classList.add('text-danger');
-                newEmailField.classList.add('is-invalid');
-            }
-
+                        btnSave.classList.add('d-none');
+                        btnCancel.innerHTML = 'Fermer';
+                        status.innerHTML = 'Votre adresse email à été changez avec succes';
+                        status.classList.add('text-success');
+                    } else {
+                        status.innerHTML = "Veuillez indiquer votre mot adresse email actuel.";
+                        status.classList.add('text-danger');
+                        emailField.classList.add('is-invalid');
+                    }
+                },
+                error: function (error) {
+                    console.log(error);
+                },
+            });
         } else {
-            status.innerHTML = "La confirmation de votre mot de passe est différente. Veuillez corriger cela.";
+            status.innerHTML = "La confirmation de votre adresse email est différente. Veuillez corriger cela.";
             status.classList.add('text-danger');
             confirmNewEmailField.classList.add('is-invalid');
         }

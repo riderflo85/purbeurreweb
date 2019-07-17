@@ -79,6 +79,7 @@ def account(request):
 
     return render(request, 'usercontrol/account.html', context=context)
 
+
 def change_pwd(request):
     req = request.POST
     old_pwd = req['old_pwd']
@@ -93,4 +94,21 @@ def change_pwd(request):
     else:
         serv_response['ServerResponse'] = False
     
+    return JsonResponse(serv_response)
+
+
+def change_email(request):
+    req = request.POST
+    old_email = req['old_email']
+    new_email = req['new_email']
+    user = request.user
+    serv_response = {}
+
+    if user.email == old_email:
+        user.email = new_email
+        serv_response['ServerResponse'] = True
+        user.save()
+    else:
+        serv_response['ServerResponse'] = False
+
     return JsonResponse(serv_response)
