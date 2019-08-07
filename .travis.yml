@@ -1,0 +1,23 @@
+dist: xenial
+language: python
+python:
+    - '3.7'
+
+branches:
+    only:
+        - config_for_prod
+
+before_scripts:
+    - pip3 install pipenv
+    - pipenv install
+    - pipenv shell
+
+env: 
+    - DJANGO_SETTINGS_MODULE=purbeurre_project.settings.travis SECRET_KEY='qcsdf' PWDDB='svhvd'
+
+services:
+    - postgresql
+
+script:
+    - ./manage.py test
+

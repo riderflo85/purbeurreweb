@@ -23,23 +23,24 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = os.environ['SECRET_KEY']
 
 # SECURITY WARNING: don't run with debug turned on in production!
-if os.environ.get('ENV') == 'PRODUCTION':
-    DEBUG = False
+# if os.environ.get('ENV') == 'PRODUCTION':
+#     DEBUG = False
 
-    # Static files settings
-    PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
+#     # Static files settings
+#     PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 
-    STATIC_ROOT = os.path.join(PROJECT_ROOT, 'staticfiles')
+#     STATIC_ROOT = os.path.join(PROJECT_ROOT, 'staticfiles')
 
-    # Extra places for collectstatic to find static files.
-    STATICFILES_DIRS = (
-        os.path.join(PROJECT_ROOT, 'static'),
-    )
+#     # Extra places for collectstatic to find static files.
+#     STATICFILES_DIRS = (
+#         os.path.join(PROJECT_ROOT, 'static'),
+#     )
 
-elif os.environ.get('ENV') == 'DEV':
-    DEBUG = True
+# elif os.environ.get('ENV') == 'DEV':
+#     DEBUG = True
+DEBUG = True
 
-ALLOWED_HOSTS = ['purbeurreweb.herokuapp.com', '127.0.0.1', '192.168.1.14', '192.168.1.25']
+ALLOWED_HOSTS = ['127.0.0.1']
 
 
 # Application definition
@@ -53,26 +54,20 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    # 'debug_toolbar',
+    'debug_toolbar', # adding
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',
+    # 'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    # 'debug_toolbar.middleware.DebugToolbarMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware', # adding
 ]
-
-if os.environ.get('ENV') == 'PRODUCTION':
-        # ...
-        # Simplified static file serving.
-        # https://warehouse.python.org/project/whitenoise/
-        STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 ROOT_URLCONF = 'purbeurre_project.urls'
 
@@ -99,40 +94,16 @@ WSGI_APPLICATION = 'purbeurre_project.wsgi.application'
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
 # Configuration de la base de données pour du distant
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'purbeurre_db',
-    'USER': 'pi',
-    'PASSWORD': 'tiflo300',
-    'HOST': '192.168.1.17',
-    'PORT': '5432',
-    }
-}
-
-if os.environ.get('ENV') == 'PRODUCTION':
-    DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'ddoul5ni3vp8eg',
-    'USER': 'vhworxizolqlla',
-    'PASSWORD': '16edc030ef11e402a44c67de84cd7a7c9f6ce88b31279f0a2d9d6b66867ff275',
-    'HOST': 'ec2-23-21-156-171.compute-1.amazonaws.com',
-    'PORT': '5432',
-    }
-}
-
-# Configuration de la base de données pour du local
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': 'purbeurre_db',
-#     'USER': 'florent',
-#     'PASSWORD': 'tiflo300',
-#     'HOST': '',
-#     'PORT': '5432',
-#     }
-# }
+#DATABASES = {
+#    'default': {
+#        'ENGINE': 'django.db.backends.postgresql',
+#        'NAME': 'purbeurre_db',
+#    'USER': 'pbweb',
+#    'PASSWORD': os.environ['PWDDB'],
+#    'HOST': '',
+#    'PORT': '5432',
+#    }
+#}
 
 
 # Password validation
@@ -174,3 +145,5 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 INTERNAL_IPS = ['127.0.0.1']
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles') # adding

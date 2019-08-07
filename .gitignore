@@ -4,6 +4,9 @@ Cahier des charges.odt
 fichier a utiliser pour la charte grapphique
 .~lock*
 purbeurre_project/__pycache__
+purbeurre_project/staticfiles
+purbeurre_project/settings/production.py
+purbeurre_project/settings/__pycache__
 search/__pycache__
 search/migrations/__pycache__
 usercontrol/__pycache__
